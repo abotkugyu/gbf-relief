@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>gbf-relief</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+    <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      var socket = io.connect('http://abot.link:10080');
+    </script>
+    <script src="/common/g_an.js"></script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script src="/common/g_ad.js"></script>
+    <style>
+html {
+  height: 100%;
+}
+main {
+  flex: 1 0 auto;
+}
+.clicked{
+  background-color:#676863;
+}
+.mdl-dialog{
+  width:50%;
+}
+.raid-container div {
+  float: left;
+}
+.raid-container {
+  overflow: hidden;
+}
+.notifibox {
+  display: inline-block;
+}
+.float-right{
+  float:right;
+}
+@media only screen and (max-width: 979px) {
+     
+}
+ 
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+} 
+ 
+@media only screen and (max-width: 480px) {
+    .sf{ 
+        display:none;
+    }
+ 
+}
+.hide{
+  display:none;
+}
+    </style>
+  </head>
+  <body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-footer">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">
+            <h4>gbf-relief　グラブルTwitter救援取得アプリ</h4>
+          </span>
+          <div class="mdl-layout-spacer"></div>
+          <nav class="mdl-navigation mdl-layout--large-screen-only">
+          </nav>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">gbf-relief</span>
+        <nav class="mdl-navigation">
+        </nav>
+      </div>
+      <main class="mdl-layout__content main">
+        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+          <div class="mdl-tabs__tab-bar">
+            <a href="#starks-panel" class="mdl-tabs__tab is-active">gbf-relief</a>
+            <a href="#lannisters-panel" class="mdl-tabs__tab">info</a>
+          </div>
+        <div class="mdl-tabs__panel is-active" id="starks-panel">
+          <div>
+            <div id="raidchecks"></div>
+          </div>
+          <div id="notification"></div>
+          <div id="root" style="float:left;"></div>
+          <div id="chat" style="float:right;"></div>
+        </div>
+        <div class="mdl-tabs__panel" id="lannisters-panel">
+          <div>
+            <ul>
+              <li><a style="color:#cc3300">※毎朝04:00にサーバーが再起動されますので再接続してください</a></li>
+              <li>動作ブラウザ　Chrome：○ IE：× Firefox：△</li>
+              <li>デザイン案、使って欲しい画像等募集してます</li>
+              <li>チャットはその時ページにいる人にしか届きません、履歴も残りません。主な用途は接続中ユーザへのンテナンスの告知です。</li>
+              <li>twitter：@abot_s <a href="https://twitter.com/abot_s" class="twitter-follow-button" data-show-count="false">Follow @abot_s</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></li>
+              <li>mail：abot_kugyu@yahoo.co.jp</li>
+            </ul>
+          </div>
+          <div>使い方
+            <ul>
+              <li>表示したい救援にチェックを入れます</li>
+              <li>救援が表示されるので、コピーを押すとクリップボードに救援IDがコピーされます</li>
+              <li>通知をONにするとデスクトップ通知が出来ます</li>
+              <li>デスクトップ通知をクリックしても救援IDのコピーが出来ます</li>
+            </ul>
+          </div>
+          <div>bug fix
+            <ul>
+              <li>06/21 15:00 追加：石HL追加</li>
+              <li>06/17 ??:?? 修正済：ウリエルとラファエルの検索条件が逆</li>
+              <li>06/16 12:36 追加：ローズクイーン<br>(ローズクイーンは他の救援と取得ロジックが違うため、他の救援の取得が前より遅くなった等の連絡あった場合、検証して削除する可能性があります)</li>
+              <li>06/15 18:50 修正済：メドューサの救援が受け取れていない</li>
+            </ul>
+          </div>
+          <div>今後の予定
+            <ul>
+              <li>救援が多いのでuiを見やすく</li>
+              <li>グラブルっぽさを出したい</li>
+              <li>音声通知(現在音源探し中)</li>
+            </ul>
+          </div>
+        </div>
+        </div>
+      </main>
+    </div>
+    
+    <script type="text/jsx">
+      class NotificationRequest extends React.Component {
+        constructor(props){
+          super(props);
+        }
+        notificationChange(event){
+          const target = event.target;
+          if(target.checked){
+            if (window.Notification) {
+              if (Notification.permission === 'granted') {
+                var n = new Notification("救援通知開始");
+              } else if (Notification.permission === 'denied') {
+                alert("通知が拒否されています\n\n許可する場合(Chrome)\n\n設定→詳細設定→プライバシー→コンテンツの設定→通知");
+              } else if (Notification.permission === 'default') {
+                Notification.requestPermission(function(result) {
+                  if (result === 'denied') {
+                  } else if (result === 'default') {
+                  } else if (result === 'granted') {
+                    var n = new Notification("救援通知開始");
+                  }
+                })
+              }
+            } else {
+              alert('通知が出来ないブラウザです');
+            }
+          }
+        }
+        render(){
+          return(
+            <div className="notifibox">
+              <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect" htmlFor="toggle-notification">
+                <input type="checkbox" onClick={this.notificationChange} id="toggle-notification" className="mdl-switch__input" />
+                <span className="mdl-switch__label">通知　</span>
+              </label>
+            </div>
+          );
+        }
+      }
+      class Chat extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            value: '',
+            comment: []
+          };
+          this.handleChange = this.handleChange.bind(this);
+          this.handleSubmit = this.handleSubmit.bind(this);
+          this.handleEnter = this.handleEnter.bind(this);
+        }
+
+        handleChange(event) {
+          this.setState({value: event.target.value});
+        }
+
+        handleEnter(event) {
+          if(event.key == 'Enter'){
+            this.handleSubmit(event);
+          }
+        }
+
+        handleSubmit(event) {
+          var text = document.getElementById("chat_text").value;
+          if( text != "" ){
+            socket.emit('send_to_all',{value:text});
+            document.getElementById("chat_text").value = "";
+          }
+          event.preventDefault();
+        }
+
+        componentDidMount(){
+          socket.on("send_to_all", (data) => {
+            this.writeBoard(data);
+          })
+        }
+        writeBoard(data){
+          var comment = this.state.comment
+          comment.unshift(data.value)
+          if(comment.length > 30){
+            comment.pop();
+          }
+          this.setState({
+            comment:comment
+          });
+        }
+        render() {
+          const board = [];
+          for(var index in this.state.comment){
+            var now_date = this.state.comment[index]['date'];
+            board.push(<tr key={index}><td>{now_date}</td><td>{this.state.comment[index]['text']}</td></tr>);
+          }
+          return (
+              <div>
+                <div>
+                  <div>チャットは送信時にページを開いてる人にしか届きません。<br />要望はメールかtwitterでお願いします。</div>
+                  <div className="mdl-textfield mdl-js-textfield">
+                    <input className="mdl-textfield__input" type="text" id="chat_text" onKeyPress={this.handleEnter}/>
+                    <label className="mdl-textfield__label" htmlFor="chat_text">...ページ見てる人全員に届きます</label>
+                  </div>
+                  <div className="float-right">
+                    <button onClick={this.handleSubmit} className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">chat</button>
+                  </div>
+                </div>
+                <div>
+                <table className="mdl-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                  <thead>
+                    <tr>
+                      <th>chat</th>
+                      <th>text</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {board}
+                  </tbody>
+                </table>
+                </div>
+              </div>
+          );
+        }
+      }
+      class NameForm extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            value: '',
+            comment: [],
+            raid_id: 'コピーしたID：'
+          };
+          this.handleChange = this.handleChange.bind(this);
+          this.handleSubmit = this.handleSubmit.bind(this);
+          this.clip = this.clip.bind(this);
+          this.clipCopy = this.clipCopy.bind(this);
+          this.notificationClipCopy = this.notificationClipCopy.bind(this);
+        }
+
+        handleChange(event) {
+          this.setState({value: event.target.value});
+        }
+
+        handleSubmit(event) {
+          socket.emit('send_to_other',{value:this.state.value})
+          event.preventDefault();
+        }
+
+        componentDidMount(){
+          socket.on("write", (data) => {
+            this.writeBoard(data);
+          })
+        }
+      
+        writeBoard(data){
+          var comment = this.state.comment
+          var is_write = false;
+          if(document.getElementById("checkbox-"+data.value.type).checked){
+            is_write = true;
+          }
+          if(is_write){
+            data.value.clicked = false;
+            comment.unshift(data.value)
+            if(comment.length > 8){
+              comment.pop();
+            }
+            this.setState({
+              comment:comment 
+            });
+            if(document.getElementById("toggle-notification").checked){
+              var text = data.value.text.replace(/[0-9a-zA-Z]{8}?/,"");
+              var n = new Notification(text+"\n"+data.value.id);
+              n.onclick = this.notificationClipCopy; 
+            }
+          }
+        }
+
+        clipCopy(data){
+          var body = document.body;
+          var text_area = document.createElement("textarea");
+          text_area.value = data;
+          body.appendChild(text_area);
+          text_area.select();
+          var result = document.execCommand("copy");
+          body.removeChild(text_area);
+        }
+      
+        notificationClipCopy(event){
+          var str = event.currentTarget.title.split("\n");
+          this.clipCopy(str[1]);
+        }
+
+        clip(e){
+          var data = e.currentTarget.getAttribute('data-number');
+          var index = e.currentTarget.getAttribute('data-index');
+          var comment = this.state.comment;
+          comment[index].clicked = true;
+          
+          this.clipCopy(data);
+            
+          var raid_id = this.state.raid_id
+          raid_id = data
+          this.setState({
+            comment:comment,
+            raid_id:'コピーしたID：'+raid_id
+          });
+        }
+
+        render() {
+          const board = [];
+          for(var index in this.state.comment){
+            var date = new Date(this.state.comment[index]['date']);
+            board.push(<tr key={index} className={this.state.comment[index]['clicked']?'clicked':''}><td className="sf">{date.toLocaleString()}</td><td>{this.state.comment[index]['text']}</td><td><button className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick={this.clip} data-index={index} data-number={this.state.comment[index]['id']}>コピー</button></td></tr>);
+          }
+          const raid = [];
+          raid.push(this.state.raid_id);
+          return (
+              <div>
+                <p id="raid_id" className="hide">{raid}</p>
+                <table className="mdl-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                  <thead>
+                    <tr>
+                      <th className="sf">日時</th>
+                      <th>内容</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {board}
+                  </tbody>
+                </table>
+              </div>
+          );
+        }
+      }
+      class RaidChecks extends React.Component {
+        constructor(props){
+          super(props);
+          this.raids = new Array();
+          this.raids[0] = {
+            'ティアHL':'203',
+            'コロHL':'205',
+            'リヴァHL':'204',
+            'ユグユグHL':'202',
+            'シュバHL':'201',
+            'セレHL':'206',
+          }
+          this.raids[1] = {
+            'ミカエル':'301',
+            'ガブリエル':'302',
+            'ラファエル':'303',
+            'ウリエル':'304',
+          };
+          this.raids[2] = {
+            '黒麒麟':'801',
+            '黄龍':'802',
+            'プロバハ':'101',
+            'グランデ':'102',
+            'ローズ':'103',
+          };
+          this.raids[3] = {
+            'ナタク':'407',
+            'ガルーダ':'408',
+            'フラム':'404',
+            'アテナ':'409',
+            'マキュラ':'405',
+            'グラニ':'411',
+          };
+          this.raids[4] = {
+            'メドゥ':'412',
+            'バアル':'406',
+            'アポロン':'402',
+            'オーディン':'401',
+            'オリヴィエ':'403',
+            'リッチ':'410',
+          };          
+          this.raids[5] = {
+            'ナタクHL':'503',
+            'フラムHL':'501',
+            'マキュラHL':'502',
+            'メドゥHL':'504',
+            'アポロンHL':'505',
+            'オリヴィエHL':'506',
+          };          
+          this.raids[6] = {
+            'バイヴカハ':'509',
+            'プロメテ':'507',
+            'カー・オン':'508',
+            'ギルガメ':'510',
+            'ヘクトル':'511',
+            'アヌビス':'512',
+          };          
+          this.raidAllCheckDisabled = this.raidAllCheckDisabled.bind(this);
+          this.raidCheck = this.raidCheck.bind(this);
+          this.setCookie = this.setCookie.bind(this);
+        }
+        raidCheck(e){
+          var data = e.currentTarget.getAttribute('data-id');
+          if(document.getElementById("checkbox-"+data).checked){
+            this.setCookie(data+'=true;');
+          }else{
+            this.setCookie(data+'=false;');
+          }
+        }
+        setCookie(data){
+          var expire = new Date();
+          expire.setTime( expire.getTime() + 1000 * 3600 * 24 * 30);
+          document.cookie = data+' expires=' + expire.toUTCString();
+        }
+        raidAllCheckDisabled(){
+          var is_checked = false;
+          /*
+          if(document.getElementById("all_check").checked){
+            is_checked = true;
+          }*/
+          for(var x = 0; x < this.raids.length; x++){
+            for(var index in this.raids[x]){
+              if(is_checked){
+                document.getElementById("label-"+this.raids[x][index]).MaterialCheckbox.check();
+                this.setCookie(this.raids[x][index]+'=true;');
+              }else{
+                document.getElementById("label-"+this.raids[x][index]).MaterialCheckbox.uncheck();
+                this.setCookie(this.raids[x][index]+'=false;');
+              }
+            }
+          }
+        }
+        componentDidMount(){
+          var result = new Array();
+
+          var allcookies = document.cookie;
+          if( allcookies != '' ){
+            var cookies = allcookies.split( '; ' );
+
+            for( var i = 0; i < cookies.length; i++ ){
+              var cookie = cookies[ i ].split( '=' );
+
+              if(document.getElementById("checkbox-"+cookie[0]) != null && cookie[1] == "true"){
+                document.getElementById("checkbox-"+cookie[0]).checked = true;
+              }
+            }
+          }
+  
+        }
+        render(){
+          const raids_dom = [];
+          for(var x = 0; x < this.raids.length; x++){
+            const raids_container = [];
+            for(var index in this.raids[x]){
+              var fix_id = "checkbox-"+this.raids[x][index];
+              var label_fix_id = "label-"+this.raids[x][index];
+              raids_container.push(<div key={this.raids[x][index]}><label id={label_fix_id} className="raid mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" htmlFor={fix_id} onClick={this.raidCheck} data-id={this.raids[x][index]}><input type="checkbox" id={fix_id} className="mdl-checkbox__input" /><span className="mdl-checkbox__label">{index}　</span></label></div>);
+            }
+            if(x == this.raids.length -1){
+              raids_container.push(<div className="mdl-cell mdl-cell--12-col" key="disabled"><button className="mdl-button mdl-js-button mdl-button--primary" onClick={this.raidAllCheckDisabled}>Remove all check</button></div>)
+            }
+            raids_dom.push(<div key={x} className="raid-container">{raids_container}</div>);
+          }
+          return(
+            <div>
+              {raids_dom}
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <NotificationRequest />,
+        document.getElementById('notification')
+      );
+      ReactDOM.render(
+        <NameForm />,
+        document.getElementById('root')
+      );
+      ReactDOM.render(
+        <Chat />,
+        document.getElementById('chat')
+      );
+      ReactDOM.render(
+        <RaidChecks />,
+        document.getElementById('raidchecks')
+      );
+    </script>
+  </body>
+</html>

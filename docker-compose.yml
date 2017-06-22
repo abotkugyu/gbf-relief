@@ -1,0 +1,62 @@
+version: "2"
+
+services:
+  php:
+    build: ./containers/php-fpm
+    volumes:
+      - "./data/html:/var/www/html"
+    environment:
+#      DB_HOST: db
+#      DB_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+  nginx:
+    build: ./containers/nginx
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - php
+      - nodejs
+#  mysql:
+#    build: ./containers/mysql
+#    volumes:
+#      - "./data/mariadb:/var/lib/mysql"
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_PASSWORD: ryouzi01
+#      MYSQL_USER: abot
+#      MYSQL_DB: abot
+#    expose:
+#     - "3306"
+  redis:
+    image: redis:3.2
+    volumes:
+      - "./containers/redis:/usr/local/etc/redis"
+    entrypoint:
+     - "redis-server"
+     - "/usr/local/etc/redis/redis.conf"
+    expose:
+     - "6379"
+  nodejs:
+    build: ./containers/nodejs
+    working_dir: "/usr/local/lib/node_modules"
+    volumes:
+      - "./data/nodejs:/usr/local/lib/node_modules"
+    ports:
+      - 10080:10080
+    environment:
+#      DB_HOST: db
+#      DB_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    command: node app.js
+    links:
+      - redis
+#  tensorflow:
+#    build: ./containers/tensorflow
+#    ports:
+#      - 8888:8888
+#      - 6006:6006
+#  haskell:
+#    build: ./containers/haskell
