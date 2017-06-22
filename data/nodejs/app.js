@@ -31,6 +31,8 @@ log4js.configure({
 logger.request = log4js.getLogger('request');
 logger.connect = log4js.getLogger('connect');
 
+console.log(raid_list);
+
 var tw_client = null;
 //var oauth2 = new oauth2(twitter_api_config.c_key, twitter_api_config.c_secret, 'https://api.twitter.com/', null, 'oauth2/token', null);
 

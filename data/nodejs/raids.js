@@ -1,5 +1,5 @@
-var raids = {};
-raids['multi'] = {
+var multi = {};
+multi = {
   '100':{
     'シュヴァリエ':201,
     'ユグドラシル':202,
@@ -46,4 +46,4 @@ raids['multi'] = {
     'アヌビス':512,
   }
 };
-exports.raids = raids;
+exports.multi = multi;
