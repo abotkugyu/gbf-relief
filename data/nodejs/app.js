@@ -97,8 +97,11 @@ server.on('request', function(req, res) {
      res.write(output);
   }else if(path === '/favicon.ico'){
   }else{
-     var output = fs.readFileSync(__dirname + path,"utf-8");
-     res.write(output);
+    if (fs.existsSync(path) && !fs.statSync(filepath).isDirectory()) {  
+      fs.statSync(file);
+      var output = fs.readFileSync(__dirname + path,"utf-8");
+      res.write(output);
+    }
   }
   res.end();
 });
