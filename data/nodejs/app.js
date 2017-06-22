@@ -10,55 +10,7 @@ var twitter = require('twitter');
 var log4js = require('log4js');
 var logger = exports = module.exports = {};
 var twitter_api_config = require('./twitter_api_config.js');
-
-var raid = {};
-raid['multi'] = {
-  '100':{
-    'シュヴァリエ':201,
-    'ユグドラシル':202,
-    'ティアマト':203,
-    'リヴァイアサン':204,
-    'コロッサス':205,
-    'セレスト':206,
-    'ミカエル':301,
-    'ガブリエル':302,
-    'ラファエル':303,
-    'ウリエル':304,
-    'プロトバハムート':101,
-    'グランデ':102,
-    'オーディン':401,
-    'アポロン':402,
-    'オリヴィエ':403,
-    'フラム':404,
-    'マキュラ':405,
-    'バアル':406,
-    'ナタク':407,
-    'ガルーダ':408,
-    'アテナ':409,
-    'リッチ':410,
-    'グラニ':411,
-    'メドゥーサ':412,
-    '黒麒麟':801,
-    '黄龍':802,
-  },
-  '110':{
-    'ローズクイーン':103,
-  },
-  '120':{
-    'フラム':501,
-    'マキュラ':502,
-    'ナタク':503,
-    'メドゥーサ':504,
-    'アポロン':505,
-    'オリヴィエ':506,
-    'プロメテウス':507,
-    'カー':508,
-    'バイヴカハ':509,
-    'ギルガメ':510,
-    'ヘクトル':511,
-    'アヌビス':512,
-  }
-};
+var raid_list = require('./raids.js');
 
 log4js.configure({
      appenders: [
@@ -106,16 +58,16 @@ var tw_client = null;
             data['date'] = event['created_at'];
             data['id'] = event['text'].match(/[0-9a-zA-Z]{8}?/);
             var is_emit = false;
-            raids:
-            for(var index in raid['multi']){
+            raids_for:
+            for(var index in raid_list['multi']){
               var reg = new RegExp(index);
               if(str[1].match(reg)){
-                for(index1 in raid['multi'][index]){
+                for(index1 in raid_list['multi'][index]){
                   var reg1 = new RegExp(index1);
                   if(str[1].match(reg1)){
-                    data['type'] = raid['multi'][index][index1];
+                    data['type'] = raid_list['multi'][index][index1];
                     is_emit = true;
-                    break raids;
+                    break raids_for;
                   }
                 }
               }
@@ -143,7 +95,8 @@ server.on('request', function(req, res) {
   if(path == '/index.html' || path == '/') {
      var output = fs.readFileSync("./index.html", "utf-8");
      res.write(output);
-  } else {
+  }else if(path === '/favicon.ico'){
+  }else{
      var output = fs.readFileSync(__dirname + path,"utf-8");
      res.write(output);
   }
