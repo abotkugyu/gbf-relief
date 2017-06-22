@@ -8,13 +8,17 @@ docker-compose
 ### Need to change
 Server Name
 ~~~
-container/nginx/config
+containers/nginx/conf/default.conf
 ~~~
 
-### Need to file
+### Need create file
 Twitter APi Config
-~~~
 data/nodejs/twitter_api_config.js
+~~~
+exports.c_key = '***';
+exports.c_secret = '***';
+exports.a_key = '***';
+exports.a_secret = ''***';
 ~~~
 
 ### After 
