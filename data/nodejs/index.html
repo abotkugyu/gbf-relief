@@ -95,13 +95,15 @@ main {
         <div class="mdl-tabs__panel" id="lannisters-panel">
           <div>
             <ul>
+              <li>これはグランブルーファンタジーのtwitterに投稿された救援を取得するアプリです。</li>
               <li><a style="color:#cc3300">※毎朝04:00にサーバーが再起動されますので再接続してください</a></li>
               <li>動作ブラウザ　Chrome：○ IE：× Firefox：△</li>
               <li>デザイン案、使って欲しい画像等募集してます</li>
               <li>チャットはその時ページにいる人にしか届きません、履歴も残りません。主な用途は接続中ユーザへのンテナンスの告知です。</li>
-              <li>github：<a class="github-button" href="https://github.com/abotkugyu" aria-label="Follow @abotkugyu on GitHub">Follow @abotkugyu</a></li>
+<!--              <li>github：<a class="github-button" href="https://github.com/abotkugyu" aria-label="Follow @abotkugyu on GitHub">Follow @abotkugyu</a></li>
               <li>twitter：@abot_s <a href="https://twitter.com/abot_s" class="twitter-follow-button" data-show-count="false">Follow @abot_s</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></li>
-              <li>mail：abot_kugyu@yahoo.co.jp</li>
+              <li>ぢそ：https://discord.gg/WMXQfnM</li>
+-->
             </ul>
           </div>
           <div>使い方
@@ -114,9 +116,10 @@ main {
           </div>
           <div>bug fix
             <ul>
+              <li>06/?? ??:?? 追加：色々</li>
               <li>06/21 15:00 追加：石HL追加</li>
               <li>06/17 ??:?? 修正済：ウリエルとラファエルの検索条件が逆</li>
-              <li>06/16 12:36 追加：ローズクイーン<br>(ローズクイーンは他の救援と取得ロジックが違うため、他の救援の取得が前より遅くなった等の連絡あった場合、検証して削除する可能性があります)</li>
+              <li>06/16 12:36 追加：ローズクイーン</li>
               <li>06/15 18:50 修正済：メドューサの救援が受け取れていない</li>
             </ul>
           </div>
@@ -225,7 +228,7 @@ main {
           return (
               <div>
                 <div>
-                  <div>チャットは送信時にページを開いてる人にしか届きません。<br />要望はメールかtwitterでお願いします。</div>
+                  <div>チャットは送信時にページを開いてる人にしか届きません。<br />要望はdiscordかtwitterでお願いします。</div>
                   <div className="mdl-textfield mdl-js-textfield">
                     <input className="mdl-textfield__input" type="text" id="chat_text" onKeyPress={this.handleEnter}/>
                     <label className="mdl-textfield__label" htmlFor="chat_text">...ページ見てる人全員に届きます</label>
@@ -367,6 +370,14 @@ main {
           super(props);
           this.raids = new Array();
           this.raids[0] = {
+            'ティア':'90',
+            'コロ':'91',
+            'リヴァ':'92',
+            'ユグユグ':'93',
+            'シュバ':'94',
+            'セレ':'95',
+          }
+          this.raids[1] = {
             'ティアHL':'203',
             'コロHL':'205',
             'リヴァHL':'204',
@@ -374,20 +385,21 @@ main {
             'シュバHL':'201',
             'セレHL':'206',
           }
-          this.raids[1] = {
+          this.raids[2] = {
             'ミカエル':'301',
             'ガブリエル':'302',
             'ラファエル':'303',
             'ウリエル':'304',
           };
-          this.raids[2] = {
+          this.raids[3] = {
             '黒麒麟':'801',
             '黄龍':'802',
             'プロバハ':'101',
             'グランデ':'102',
             'ローズ':'103',
+            'プロバハHL':'104',
           };
-          this.raids[3] = {
+          this.raids[4] = {
             'ナタク':'407',
             'ガルーダ':'408',
             'フラム':'404',
@@ -395,7 +407,7 @@ main {
             'マキュラ':'405',
             'グラニ':'411',
           };
-          this.raids[4] = {
+          this.raids[5] = {
             'メドゥ':'412',
             'バアル':'406',
             'アポロン':'402',
@@ -403,7 +415,7 @@ main {
             'オリヴィエ':'403',
             'リッチ':'410',
           };          
-          this.raids[5] = {
+          this.raids[6] = {
             'ナタクHL':'503',
             'フラムHL':'501',
             'マキュラHL':'502',
@@ -411,7 +423,7 @@ main {
             'アポロンHL':'505',
             'オリヴィエHL':'506',
           };          
-          this.raids[6] = {
+          this.raids[7] = {
             'バイヴカハ':'509',
             'プロメテ':'507',
             'カー・オン':'508',

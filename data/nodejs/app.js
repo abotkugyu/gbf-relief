@@ -30,6 +30,7 @@ log4js.configure({
 });
 logger.request = log4js.getLogger('request');
 logger.connect = log4js.getLogger('connect');
+logger.request.error('start stream'); 
 
 var tw_client = null;
 //var oauth2 = new oauth2(twitter_api_config.c_key, twitter_api_config.c_secret, 'https://api.twitter.com/', null, 'oauth2/token', null);
@@ -44,7 +45,8 @@ var tw_client = null;
       access_token_secret: twitter_api_config.a_secret,
 //      bearer_token: access_token
     });
-    tw_client.stream('statuses/filter', {track: 'Lv100,Lv110,Lv120'}, function(stream) {
+function get_raider(){
+    tw_client.stream('statuses/filter', {track: 'Lv150,Lv100,Lv110,Lv120,Lv75,Lv70,Lv60,Lv50'}, function(stream) {
       stream.on('data', function(event){
         logger.request.info(event['text']);
         if(event['text'].match(/\n/)){
@@ -84,23 +86,28 @@ var tw_client = null;
       stream.on('end', function(reason) {
         logger.request.error('end stream'); 
         logger.request.error(reason); 
+        get_raider();
       });
     });
 //});
-
+}
+get_raider();
 
 server.on('request', function(req, res) {
   var path = url.parse(req.url).pathname;
-  res.writeHead(200, {'Content-Type': 'text/html'});
   if(path == '/index.html' || path == '/') {
+    res.writeHead(200, {'Content-Type': 'text/html'});
      var output = fs.readFileSync("./index.html", "utf-8");
      res.write(output);
   }else if(path === '/favicon.ico'){
+      res.writeHead(403, {'Content-Type': 'text/html'});
   }else{
-    if (fs.existsSync(path) && !fs.statSync(filepath).isDirectory()) {  
-      fs.statSync(file);
+    if (fs.existsSync(__dirname + path)) {  
+      res.writeHead(200, {'Content-Type': 'text/html'});
       var output = fs.readFileSync(__dirname + path,"utf-8");
       res.write(output);
+    }else{
+      res.writeHead(403, {'Content-Type': 'text/html'});
     }
   }
   res.end();
