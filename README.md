@@ -1,5 +1,9 @@
 # gbf-relief
 
+This application get twitter granbluefantasy raid.
+
+DEMO:http://gbf-relief.abot.link/
+
 ### Need to module
 ~~~
 docker-compose
