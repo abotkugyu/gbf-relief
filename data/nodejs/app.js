@@ -11,6 +11,19 @@ var log4js = require('log4js');
 var logger = exports = module.exports = {};
 var twitter_api_config = require('./twitter_api_config.js');
 var raid_list = require('./raids.js');
+var get_time = new Date();
+var streams = null;
+
+function check_disconnect_timer(){
+  var now_time = new Date();
+  if(now_time - get_time > 120000 && streams !== null){
+    logger.request.info('re_connect');
+    streams.destroy();
+    get_raider();
+  }
+}
+
+setInterval(check_disconnect_timer,60000);
 
 log4js.configure({
      appenders: [
@@ -38,6 +51,9 @@ var tw_client = null;
 //oauth2.getOAuthAccessToken('', {
 //    'grant_type': 'client_credentials'
 //  }, function (e, access_token) {
+var tw_client = null;
+
+function connect_client(){
     tw_client = new twitter({
       consumer_key: twitter_api_config.c_key,
       consumer_secret: twitter_api_config.c_secret,
@@ -45,10 +61,15 @@ var tw_client = null;
       access_token_secret: twitter_api_config.a_secret,
 //      bearer_token: access_token
     });
+}
+
 function get_raider(){
+    connect_client();
     tw_client.stream('statuses/filter', {track: 'Lv150,Lv100,Lv110,Lv120,Lv75,Lv70,Lv60,Lv50'}, function(stream) {
+      streams = stream;
       stream.on('data', function(event){
         logger.request.info(event['text']);
+        get_time = new Date();
         if(event['text'].match(/\n/)){
           var str = event['text'].split("\n");
           //str[0]:コメント+ID,str[1]:lv+raid名
@@ -81,12 +102,12 @@ function get_raider(){
         }
       });
       stream.on('error', function(event){
+        logger.request.error('error stream'); 
         logger.request.error(event);
       });
       stream.on('end', function(reason) {
         logger.request.error('end stream'); 
         logger.request.error(reason); 
-        get_raider();
       });
     });
 //});
